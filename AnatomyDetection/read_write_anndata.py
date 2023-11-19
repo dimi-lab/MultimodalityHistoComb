@@ -46,9 +46,12 @@ if __name__ == "__main__":
     output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/output/utag_clustering/HE"
     data_root_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/OV_TMA_HE_QuPath_proj_AB/export"
     roi_list = sorted(os.listdir(data_root_dir))
-    for roi_id in roi_list:
+    for idx, roi_id in enumerate(roi_list):
+        print("Processing %s, finished %d/%d" % (roi_id, idx, len(roi_list)))
         csv_fn = os.path.join(data_root_dir, roi_id, roi_id+"_QUANT.tsv")
-        df = pd.read_csv(csv_fn, sep='\t')
+        org_df = pd.read_csv(csv_fn, sep='\t')
+        col = list(org_df.columns)
+        df = org_df.dropna(subset=["Image"] + col[6:])
         xy_names, cell_loc = get_specific_feature(df, 6, 8)
         mf_names, morphological_features = get_specific_feature(df, 9, 22)
         pf_names, protein_features = get_specific_feature(df, 22)
