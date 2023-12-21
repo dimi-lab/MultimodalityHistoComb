@@ -2,7 +2,9 @@ De-array is a process that gets the tissue core out of the whole slide image, an
 Since the QuPath Dearrayer doesn't work well in MxIF image, we propose to de-array in H&E, 
 and the affine the core locations to MxIF, so that we can minimize human interaction in directly 
 annotating cores within MxIF. To achieve this, we only need to annotate 3 pairs of points in H&E and MxIF 
-to calculate the transformation between the two images.
+to calculate the transformation between the two images. The detected TMA core grids can be translated to MxIF using
+our groovy script for locating TMA cores within MxIF. Though there could be some tissue cores could not be encapsulated well 
+(because of tissue warp maybe) within the whole slide image, it has minimized human efforts in detection TMA cores.
 
 ## 1. H&E de-array
     a. Use Dearrayer within QuPath. May need to manually adjust some parameters.
