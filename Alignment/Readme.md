@@ -14,6 +14,14 @@ Question:
 
 
 
+# For papers
+## robustness
+1. mask a region to simulate tissue damage (probreg_points_mask.py)
+2. different segmentation methods
+
+## quantitative evalution
+1. compare the metrics for annotations and same and serial section
+
 
 
 
