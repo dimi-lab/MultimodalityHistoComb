@@ -1,0 +1,358 @@
+# This annotation of cell type markers is tailored for surface proteins
+# normally profilid with multiplexed imaging (IMC, CODEX).
+# It is a simple reference for myself and may be more detailed in some parts than others.
+# This reference is hierarchical.
+# This annotation is generally pan-tissue.
+# Author: Andre Rendeiro
+# License: CC BY-SA 2.0
+
+cell_types:
+    structural:
+        basal:
+            markers:
+                - KRT5
+                - KRT14
+                - p63
+                - TP63
+                - PDPN
+        epithelium:
+            markers:
+                - Cytokeratins
+                - Keratin818
+                - K818
+            # Lung:
+            club:
+                markers:
+                    - KRT15
+                    - CD74
+                    - CC16
+                    - SCGB1A1
+            hillock:
+                markers:
+                    - KRT4
+                    - KRT13
+            ciliated:
+                markers:
+                    - FOXJ1
+                    - TUBB1
+                    - p73
+                    - TP73
+            tuft:
+                markers:
+                    -
+            goblet:
+                markers:
+                    - MUC5A
+                    - MUC5AC
+                    - MUC5B
+                    - SPDEF
+            aleveolar:
+                markers:
+                    - CD44
+                    - Keratin818
+                    - K818
+                typeI:
+                    markers:
+                        - SFTPB
+                        - PDPN
+                        - Keratin818
+                        - K818
+                        - AGER
+                        - AQP5
+                        - PDPN
+                typeII:
+                    markers:
+                        - SFTPC
+                        - SFTPA
+                        - Keratin818
+                        - K818
+        endothelial:
+            markers:
+                - EpCAM
+                - CD31
+                - AQ1
+                - Periostin
+            lymphatic:
+                markers:
+                    - PDPN
+        mesenchymal:
+            markers:
+                - Vimentin
+                - VIM
+        fibroblast:
+            markers:
+                - AlphaSMA
+                - aSMA
+                - CollagenTypeI
+                - ColTypeI
+            cancer-associated fibroblast:
+                markers:
+                    -
+            myofibroblast:
+                markers:
+                    - ACTA2
+        smooth_muscle:
+            markers:
+                - aSMA
+                - AlphaSMA
+        skeletal_muscle:
+            markers:
+                - CD56
+        chondrocytes:
+            markers:
+                - SOX9
+    immune:
+        lymphoid:
+            b_cell:
+                markers:
+                    - CD45
+                    - CD20
+            T_cell:
+                markers:
+                    - CD45
+                    - CD3
+                CD4:
+                    markers:
+                        - CD4
+                    Treg:
+                        markers:
+                            - FoxP3
+                            - FOXP3
+                CD8:
+                    markers:
+                        - CD8a
+                        - CD8A
+            NKcells:
+                markers:
+                    - CD45
+                    - CD56
+                    - CD57
+                    - CD11b
+                    - ITGAM
+        myeloid:
+            markers:
+                - CD45
+                - CD16
+                - CD68
+                - CD11b
+                - CD11c
+            monocytes:
+                markers:
+                    - CD14
+                    - IL1beta
+                    - IL1B
+            macrophages:
+                markers:
+                    - Vimentin
+                    - VIM
+                    - CD45
+                    - CD14
+                    - CD16
+                    - CD4
+                    - CD11b
+                    - CD11c
+                    - ITGAM
+                    - CD163
+                sources:
+                    - https://www.cusabio.com/c-20938.html
+                M1:
+                    phenotype: pro-inflamatory, autoimmune, obesity and diabetes, atherosclerosis
+                    environment: virus, bacteria
+                    differentiating_factors:
+                        - LPS, TLR4, NFKB
+                        - TLR4, NFKB
+                        - IFNG, STAT1
+                        - IL6, STAT1
+                    markers:
+                        - CD80
+                        - CD86
+                        - CD64
+                        - CD32
+                        - CD11c
+                M2:
+                    phenotype: anti-inflamatory, wound healing, fibrosis, allergy and asthma
+                    environment: cancer
+                    differentiating_factors:
+                        - IL6, STAT3
+                        - IL10, STAT3
+                        - IL4, STAT6
+                        - IL4, PI3K
+                        - TGFBeta, SMAD3
+                        - IL13
+                    markers:
+                        - CD206
+                        - CD68
+                        - CD163
+                        - ARG1
+            neutrophils:
+                markers:
+                    - CD11b
+                    - CD11c
+                    - CD15
+                    - MPO
+                    - S100A9
+                    - S100A8
+                    - Periostin
+            dendritic_cells:
+                markers:
+                    - CD45
+                    - CD14
+                    - CD16
+                    - FCGR3A
+                    - Cd11c
+                    - ITGAX
+                cDC1:
+                    sources:
+                        - https://doi.org/10.1016/j.smim.2021.101481
+                    functions:
+                        - regulates host defense to viruses and other intracellular pathogens and promotes CD8+ T-cell-mediated anti-tumor immunity.
+                        - promote tumor rejection given their specialization in recognition of dead and dying cells, cross-presentation and ability to drive CD8 + T-cell response.
+                    markers:
+                        - IRF8
+                        - BATF3
+                        - ID2
+                        - CLEC9A (DNGR-1)
+                        - XCR1
+                        - BDCA-3 (CD141)
+                cDC2:
+                    sources:
+                        - https://doi.org/10.1016/j.smim.2021.101481
+                    functions: orchestrate host barrier protection as well as immunity to extracellular pathogens and/or allergens largely by promoting CD4+ helper T-cell responses through presentation of soluble antigens via MHC class II (MHC-II).
+                    markers:
+                        - IRF4 (high)
+                        - RELB
+                        - ZEB2
+                        - KLF4
+                        - NOTCH
+                pDC:
+                    sources:
+                        - https://doi.org/10.1016/j.smim.2021.101481
+                    functions:
+                        - specialized for anti-viral responses and are an important source of IFN-I (and IFN-III) upon viral infection.
+                        - pDC are considered to have a similar role in potentiating anti-tumoral immune responses via IFN-I production, however, pDC may also drive tolerance and immune suppression in the context of malignancy.
+                        - While pDC are able to cross-present antigen to prime CD8 + T-cells, they exhibit inferior cross-presenting capacity relative to their conventional DC counterparts.
+                    markers:
+                        - CD11d
+                        - BDCA-2 (CLEC4C or CD303)
+                        - CD123
+                        - CD304
+                        - TCF4
+                        - IRF8
+                        - RUNX1
+                tDC:
+                    sources: 10.1016/j.celrep.2019.11.042
+                    comment: also known as AXL+ DC or ASDC
+                    markers:
+                        - AXL
+                MoDC:
+                    sources:
+                        - https://doi.org/10.1016/j.smim.2021.101481
+                    functions:
+                        - highly context-dependent DC subset that differentiate in response to inflammatory stimuli and are recruited to sites of inflammation, including the TME, via the CCR2-CCL2 chemokine signaling axis.
+                        - MoDC are heterogeneous and share substantial overlap with certain cDC2 subsets and monocytes, which is reflected in the diverse range of immune actions initiated by MoDC.
+                    markers:
+                        - CD14
+                        - CD88
+                DC3:
+                    sources:
+                        - https://doi.org/10.1016/j.smim.2021.101481
+                    functions:
+                        - tumor-infiltrating DCs.
+                        - share overlapping phenotypic features with conventional DC, including both cDC1 and cDC2, yet harbor a distinct transcriptional profile.
+                        - DC3 program is signified by the co-existence maturation/activation markers and an immunoregulatory profile that includes markers of DC migration, DC maturation, immune-regulation.
+                    markers:
+                        -
+            basophiles:
+                markers:
+                    -
+            eosinophil:
+                markers:
+                    - IL5RA
+                    - CCR3
+                    - PRG2
+                    - PTGDR2
+                    - SIGLEC8
+                    - GATA2
+            mast_cell:
+                markers:
+                    - cKIT
+                    - CD117
+                    - MastCellTryptase
+                    - TPSAB1
+            myeloid-derived suppressor cells:
+                markers:
+                    - CD11b
+                    - ITGAM
+                    - GranzymeB
+                    - GZMB
+
+cell_states:
+    proliferative:
+        markers:
+            - Ki67
+            - PCNA
+            - MCM2
+            - pHH3
+    cell death:
+        markers:
+            - CleavedCaspase3
+            - CC3
+            - CleavedPARP
+            - Survivin
+            - CitH3
+            - SC5b9
+            - iNOS
+    hypoxia:
+        markers:
+            - Carbonic anhydrase IX
+    cytotoxic:
+        markers:
+            - GranzymeB
+    activation:
+        markers:
+            - CD27
+            - CD39
+            - CD84
+    # For DCs:
+    migration:
+        markers:
+            - CCR7
+            - FSCN1
+    maturation:
+        markers:
+            - LAMP3
+            - CD80
+            - CD83
+            - CD40
+    immune-regulation:
+        markers:
+            - PD-L1
+            - PD-L2
+            - IDO1
+            - CD200
+    inflammation:
+        markers:
+            - pSTAT3
+            - pSTAT3Tyr705
+            - pNFkbp65
+            - IRF2BP2
+            - IL6
+            - IL1beta
+            - iNOS
+    arrest:
+        markers:
+            - p21
+            - p27
+    senescence:
+        markers:
+            - uPAR
+            - p21
+            - p16
+            - CDKN1A
+            - CDKN2A
+    infected:
+        markers:
+            - SARSSpikeS1
+
+# When updating, make sure syntax is correct:
+# $ python -c "import yaml; yaml.safe_load(open('markers_to_cell_type_labels.yaml'))"
