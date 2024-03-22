@@ -1,56 +1,54 @@
 import os
 import argparse
 from probreg import cpd
-import numpy as np
-import json
 from utils import *
 import tifffile as tf
 import copy
 
 if __name__ == '__main__':
-    # parser = argparse.ArgumentParser()
-    #
-    # parser.add_argument("-s", "--he_quant_fn", # cell quantification from source image. We usually treat H&E image as
-    #                     # source image, because there is less image channels, easier to write the transformed image.
-    #                     required=True,
-    #                     dest="he_quant_fn",
-    #                     help="source, H&E Cell quantification from QuPath. Cell coordinate need to be saved in µm")
-    # parser.add_argument("-t", "--mxif_quant_fn",  # cell quantification from target image.
-    #                     required=True,
-    #                     dest='mxif_quant_fn',
-    #                     help="target, Cell quantification from QuPath. Cell coordinate need to be saved in µm")
-    # parser.add_argument("-is", "--he_img_fn",
-    #                     required=True,
-    #                     dest="he_img_fn",
-    #                     help="source image, H&E image file, supposed to be ome tiff")
-    # parser.add_argument("-it", "--mxif_img_fn",
-    #                     required=True,
-    #                     dest="mxif_img_fn",
-    #                     help="target image (MxIF image file), supposed to be ome tiff")
-    # parser.add_argument("-v", "--verbose",
-    #                     dest="verbose",
-    #                     default=False,
-    #                     help="Save debug information"
-    #                     )
-    # parser.add_argument("-o", "--output_dir",
-    #                     default=os.getcwd(),
-    #                     dest='output_dir',
-    #                     help="Transformed H&E output directory")
-    #
-    # args = parser.parse_args()
-    # MxIF_quant_fn = args.mxif_quant_fn
-    # HE_quant_fn = args.he_quant_fn
-    # HE_img_fn = args.he_img_fn
-    # MxIF_img_fn = args.mxif_img_fn
-    # output_dir = args.output_dir
-    # verbose = args.verbose
+    parser = argparse.ArgumentParser()
 
-    MxIF_quant_fn = "/opt/export/A-8_StarDist_QUANT.tsv"
-    HE_quant_fn = "/opt/export/A-8_StarDist_QUANT.tsv"
-    HE_img_fn = "/opt/HE_FOVs/same_section/G-8.tif"
-    MxIF_img_fn = "/opt/MxIF_FOVs/Slide2050_24Plex/G-8.tif"
-    output_dir = "/opt/test_align_wsi"
-    verbose = True
+    parser.add_argument("-s", "--he_quant_fn", # cell quantification from source image. We usually treat H&E image as
+                        # source image, because there is less image channels, easier to write the transformed image.
+                        required=True,
+                        dest="he_quant_fn",
+                        help="source, H&E Cell quantification from QuPath. Cell coordinate need to be saved in µm")
+    parser.add_argument("-t", "--mxif_quant_fn",  # cell quantification from target image.
+                        required=True,
+                        dest='mxif_quant_fn',
+                        help="target, Cell quantification from QuPath. Cell coordinate need to be saved in µm")
+    parser.add_argument("-is", "--he_img_fn",
+                        required=True,
+                        dest="he_img_fn",
+                        help="source image, H&E image file, supposed to be ome tiff")
+    parser.add_argument("-it", "--mxif_img_fn",
+                        required=True,
+                        dest="mxif_img_fn",
+                        help="target image (MxIF image file), supposed to be ome tiff")
+    parser.add_argument("-v", "--verbose",
+                        dest="verbose",
+                        default=False,
+                        help="Save debug information"
+                        )
+    parser.add_argument("-o", "--output_dir",
+                        default=os.getcwd(),
+                        dest='output_dir',
+                        help="Transformed H&E output directory")
+
+    args = parser.parse_args()
+    MxIF_quant_fn = args.mxif_quant_fn
+    HE_quant_fn = args.he_quant_fn
+    HE_img_fn = args.he_img_fn
+    MxIF_img_fn = args.mxif_img_fn
+    output_dir = args.output_dir
+    verbose = args.verbose
+
+    # MxIF_quant_fn = "/opt/export/A-8_StarDist_QUANT.tsv"
+    # HE_quant_fn = "/opt/export/A-8_StarDist_QUANT.tsv"
+    # HE_img_fn = "/opt/HE_FOVs/same_section/G-8.tif"
+    # MxIF_img_fn = "/opt/MxIF_FOVs/Slide2050_24Plex/G-8.tif"
+    # output_dir = "/opt/test_align_wsi"
+    # verbose = True
 
     tif_fn = os.path.split(HE_img_fn)[1]
 
