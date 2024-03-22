@@ -6,6 +6,7 @@ from matplotlib.patches import Patch
 import os
 import natsort
 import seaborn as sns
+import statistics
 
 data_root_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/AlignmentEval"
 aa_root_dir = os.path.join(data_root_dir, "ApplyAlignment")
@@ -46,15 +47,30 @@ seg_method_list = ["StarDist", "Watershed"]
 metric_list = ["RMSE", "theta", "delta"]
 units = ["μm", "degree", "μm"]
 
+seg_method_idx = 0
+wrt_str = ",StarDist,StarDist,Watershed,Watershed\n"
+wrt_str += ",Sec1,Sec2,Sec1,Sec2\n"
+
+out_fn = os.path.join(data_root_dir, "boxplot_eval_num.csv")
+
 for idx, metric in enumerate(metric_list):
+    wrt_str += "d_"+metric + "_avg,"
     gt_sec1 = read_metric(aa_root_dir, ROI_list, seg_method_list[0], metric, "Sec1", "GT")
     cpd_sec1 = read_metric(aa_root_dir, ROI_list, seg_method_list[0], metric, "Sec1", "CPD")
     gt_sec2 = read_metric(aa_root_dir, ROI_list, seg_method_list[0], metric, "Sec2", "GT")
     cpd_sec2 = read_metric(aa_root_dir, ROI_list, seg_method_list[0], metric, "Sec2", "CPD")
 
-    res_sec1 = np.array(gt_sec1) - np.array(cpd_sec1)
-    res_sec2 = np.array(gt_sec2) - np.array(cpd_sec2)
+    res_sec1 = abs(np.array(gt_sec1) - np.array(cpd_sec1))
+    res_sec2 = abs(np.array(gt_sec2) - np.array(cpd_sec2))
 
+    sec1_seg1_m_avg = statistics.mean(res_sec1)
+    sec1_seg1_m_std = statistics.stdev(res_sec1)
+    sec2_seg1_m_avg = statistics.mean(res_sec2)
+    sec2_seg1_m_std = statistics.stdev(res_sec2)
+    print("Segmentation: %s, Metric: %s, section:%s" % (seg_method_list[0], metric, "section1"))
+    print("mean: %f, std: %s" % (sec1_seg1_m_avg, sec1_seg1_m_std))
+    print("Segmentation: %s, Metric: %s, section:%s" % (seg_method_list[0], metric, "section2"))
+    print("mean: %f, std: %s" % (sec2_seg1_m_avg, sec2_seg1_m_std))
     stardist_result_df = pd.DataFrame({
         'Sec1': res_sec1,
         'Sec2': res_sec2
@@ -65,13 +81,25 @@ for idx, metric in enumerate(metric_list):
     gt_sec2 = read_metric(aa_root_dir, ROI_list, seg_method_list[1], metric, "Sec2", "GT")
     cpd_sec2 = read_metric(aa_root_dir, ROI_list, seg_method_list[1], metric, "Sec2", "CPD")
 
-    res_sec1 = np.array(gt_sec1) - np.array(cpd_sec1)
-    res_sec2 = np.array(gt_sec2) - np.array(cpd_sec2)
-
+    res_sec1 = abs(np.array(gt_sec1) - np.array(cpd_sec1))
+    res_sec2 = abs(np.array(gt_sec2) - np.array(cpd_sec2))
+    sec1_seg2_m_avg = statistics.mean(res_sec1)
+    sec1_seg2_m_std = statistics.stdev(res_sec1)
+    sec2_seg2_m_avg = statistics.mean(res_sec2)
+    sec2_seg2_m_std = statistics.stdev(res_sec2)
+    print("Segmentation: %s, Metric: %s, section:%s" % (seg_method_list[1], metric, "section1"))
+    print("mean: %f, std: %s" % (sec1_seg2_m_avg, sec1_seg2_m_std))
+    print("Segmentation: %s, Metric: %s, section:%s" % (seg_method_list[1], metric, "section2"))
+    print("mean: %f, std: %s" % (sec2_seg2_m_avg, sec2_seg2_m_std))
     watershed_result_df = pd.DataFrame({
         'Sec1': res_sec1,
         'Sec2': res_sec2
     })
+
+    wrt_str += str(sec1_seg1_m_avg) + "," + str(sec2_seg1_m_avg) + "," + str(sec1_seg2_m_avg) + "," + str(sec2_seg2_m_avg) + "\n"
+    wrt_str += "d_"+metric + "_std,"
+    wrt_str += str(sec1_seg1_m_std) + "," + str(sec2_seg1_m_std) + "," + str(sec1_seg2_m_std) + "," + str(
+        sec2_seg2_m_std) + "\n"
 
     datasets = [stardist_result_df, watershed_result_df]
 
@@ -148,4 +176,6 @@ for idx, metric in enumerate(metric_list):
 
     print("Done")
 
-
+fp = open(out_fn, 'w')
+fp.write(wrt_str)
+fp.close()
