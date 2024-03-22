@@ -45,11 +45,11 @@ if __name__ == '__main__':
     # output_dir = args.output_dir
     # verbose = args.verbose
 
-    MxIF_quant_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/AlignmentEval/QuPathAnnoProj_MxIF/export/A-8_StarDist_QUANT.tsv"
-    HE_quant_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/AlignmentEval/QuPathAnnoProj_HE_Sec1/export/A-8_StarDist_QUANT.tsv"
-    HE_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section/G-8.tif"
-    MxIF_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/G-8.tif"
-    output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_wsi"
+    MxIF_quant_fn = "/opt/export/A-8_StarDist_QUANT.tsv"
+    HE_quant_fn = "/opt/export/A-8_StarDist_QUANT.tsv"
+    HE_img_fn = "/opt/HE_FOVs/same_section/G-8.tif"
+    MxIF_img_fn = "/opt/MxIF_FOVs/Slide2050_24Plex/G-8.tif"
+    output_dir = "/opt/test_align_wsi"
     verbose = True
 
     tif_fn = os.path.split(HE_img_fn)[1]
