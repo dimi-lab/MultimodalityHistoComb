@@ -8,40 +8,37 @@ from stardist.models import StarDist2D, Config2D
 from csbdeep.utils import Path, normalize
 
 if __name__ == '__main__':
-    # parser = argparse.ArgumentParser()
-    #
-    # parser.add_argument("-is", "--he_img_fn",
-    #                     required=True,
-    #                     dest="he_img_fn",
-    #                     help="source image, H&E image file, supposed to be ome tiff")
-    # parser.add_argument("-it", "--mxif_img_fn",
-    #                     required=True,
-    #                     dest="mxif_img_fn",
-    #                     help="target image (MxIF image file), supposed to be ome tiff")
-    # parser.add_argument("-v", "--verbose",
-    #                     dest="verbose",
-    #                     default=False,
-    #                     help="Save debug information"
-    #                     )
-    # parser.add_argument("-o", "--output_dir",
-    #                     default=os.getcwd(),
-    #                     dest='output_dir',
-    #                     help="Transformed H&E output directory")
-    #
-    # args = parser.parse_args()
-    #
-    # HE_img_fn = args.he_img_fn
-    # MxIF_img_fn = args.mxif_img_fn
-    # output_dir = args.output_dir
-    # verbose = args.verbose
+    parser = argparse.ArgumentParser()
 
-    # MxIF_model_fn = "/infodev1/non-phi-data/junjiang/model/StarDist/dsb2018_heavy_augment.pb"
-    # HE_model_fn = "/infodev1/non-phi-data/junjiang/model/StarDist/he_heavy_augment.pb"
+    parser.add_argument("-is", "--he_img_fn",
+                        required=True,
+                        dest="he_img_fn",
+                        help="source image, H&E image file, supposed to be ome tiff")
+    parser.add_argument("-it", "--mxif_img_fn",
+                        required=True,
+                        dest="mxif_img_fn",
+                        help="target image (MxIF image file), supposed to be ome tiff")
+    parser.add_argument("-v", "--verbose",
+                        dest="verbose",
+                        default=False,
+                        help="Save debug information"
+                        )
+    parser.add_argument("-o", "--output_dir",
+                        default=os.getcwd(),
+                        dest='output_dir',
+                        help="Transformed H&E output directory")
 
-    HE_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section/A-8.tif"
-    MxIF_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/A-8.tif"
-    output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_wsi"
-    verbose = True
+    args = parser.parse_args()
+
+    HE_img_fn = args.he_img_fn
+    MxIF_img_fn = args.mxif_img_fn
+    output_dir = args.output_dir
+    verbose = args.verbose
+
+    # HE_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section/A-8.tif"
+    # MxIF_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/A-8.tif"
+    # output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_wsi"
+    # verbose = True
 
     tif_fn = os.path.split(HE_img_fn)[1]
     # TODO: read pixel size from the image tags (assigned to Raymond)
@@ -99,10 +96,6 @@ if __name__ == '__main__':
     print("Aligning based on cell segmentation.")
     HE_centroids_um = np.array(HE_centroids_pix) * HE_pixel_size
     MxIF_centroids_um = np.array(MxIF_centroids_pix) * MxIF_pixel_size
-    # HE_centroids_um = np.array(HE_centroids_pix) * MxIF_pixel_size
-    # MxIF_centroids_um = np.array(MxIF_centroids_pix) * HE_pixel_size
-    # HE_centroids_um = np.array(HE_centroids_pix)
-    # MxIF_centroids_um = np.array(MxIF_centroids_pix)
     tf_param, sigma2, q = cpd.registration_cpd(HE_centroids_um, MxIF_centroids_um, maxiter=20, tol=1.0e-11,
                                                update_scale=False)
     r_points = tf_param.transform(copy.deepcopy(HE_centroids_um))
@@ -112,8 +105,6 @@ if __name__ == '__main__':
         fn = "log_" + tif_fn + "_centroids_alignment.png"
         plot_centroids_trans(HE_centroids_um, MxIF_centroids_um, r_points, legend, title, output_dir, fn)
 
-    # real_S = HE_pixel_size/MxIF_pixel_size
-    # real_S = 1
     theta, degrees, s, delta, gt_M = get_M_from_cpd(tf_param, HE_pixel_size, MxIF_pixel_size)
 
     # TODO: add refinement after CPD  (assigned to Jun)
@@ -124,5 +115,4 @@ if __name__ == '__main__':
 
     if verbose:
         s_fn = os.path.join(output_dir, "side_by_side_" + tif_fn)
-
         save_transformed_HE_and_MxIF(trans_he_img, mxif_img_3_channel, dapi_img.shape, MxIF_pixel_size, s_fn)

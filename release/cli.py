@@ -45,8 +45,8 @@ if __name__ == '__main__':
 
     # MxIF_quant_fn = "/opt/export/A-8_StarDist_QUANT.tsv"
     # HE_quant_fn = "/opt/export/A-8_StarDist_QUANT.tsv"
-    # HE_img_fn = "/opt/HE_FOVs/same_section/G-8.tif"
-    # MxIF_img_fn = "/opt/MxIF_FOVs/Slide2050_24Plex/G-8.tif"
+    # HE_img_fn = "/opt/HE_FOVs/same_section/A-8.tif"
+    # MxIF_img_fn = "/opt/MxIF_FOVs/Slide2050_24Plex/A-8.tif"
     # output_dir = "/opt/test_align_wsi"
     # verbose = True
 
@@ -67,7 +67,6 @@ if __name__ == '__main__':
     # TODO: read pixel size from the image tags (assigned to Raymond)
     HE_pixel_size = 0.2201  # unit micron
     MxIF_pixel_size = 0.325
-    # real_S = HE_pixel_size/MxIF_pixel_size
     theta, degrees, s, delta, gt_M = get_M_from_cpd(tf_param, HE_pixel_size, MxIF_pixel_size)
 
     # TODO: add refinement after CPD  (assigned to Jun)
