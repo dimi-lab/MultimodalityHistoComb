@@ -6,6 +6,7 @@ import matplotlib.patches as mpatches
 import math
 import tifffile as tf
 import cv2
+from skimage.measure import label, regionprops
 
 def get_cell_loc(HE_quant_fn, col_name_x='Centroid X µm', col_name_y='Centroid Y µm'):
     HE_quant_df = pd.read_csv(HE_quant_fn, sep='\t')
@@ -13,6 +14,12 @@ def get_cell_loc(HE_quant_fn, col_name_x='Centroid X µm', col_name_y='Centroid 
     he_y = HE_quant_df[col_name_y]
     source = np.array([he_x, he_y]).T
     return source
+
+def get_cell_loc_from_StarDist_pred(pred_lbl):
+    cell_centroids = []
+    for r in regionprops(pred_lbl):
+        cell_centroids.append(list(r.centroid))
+    return cell_centroids
 
 def apply_aff_trans2points(source, M):
     '''
@@ -37,13 +44,20 @@ def plot_centroids_trans(s_points, t_points, t_s_points, legend, title, out_dir,
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, fn))
 
+def plot_cell_detection(img, cell_centroids, out_dir, fn):
+    plt.figure(dpi=300)
+    plt.imshow(img)
+    plt.scatter(cell_centroids[:, 1], cell_centroids[:, 0], c='r', s=2)
+    plt.axis('image')
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, fn))
 
-def get_M_from_cpd(tf_param, real_S):
+def get_M_from_cpd(tf_param, source_pix_size, target_pix_size):
     R = tf_param.rot
     T = tf_param.t
-
-    M = np.array([[real_S*R[0, 0], R[0, 1], T[0]],
-                  [R[1, 0], real_S*R[1, 1], T[1]]]).astype(float)
+    real_S = source_pix_size/target_pix_size
+    M = np.array([[real_S*R[0, 0], R[0, 1], T[1]/target_pix_size],
+                  [R[1, 0], real_S*R[1, 1], T[0]/target_pix_size]]).astype(float)
 
     theta = math.atan(R[1, 0] / R[0, 0])
     degrees = theta * (180.0 / math.pi)
