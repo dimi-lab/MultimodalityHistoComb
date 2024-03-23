@@ -67,8 +67,8 @@ if __name__ == '__main__':
     # TODO: read pixel size from the image tags (assigned to Raymond)
     HE_pixel_size = 0.2201  # unit micron
     MxIF_pixel_size = 0.325
-    real_S = HE_pixel_size/MxIF_pixel_size
-    theta, degrees, s, delta, gt_M = get_M_from_cpd(tf_param, real_S)
+    # real_S = HE_pixel_size/MxIF_pixel_size
+    theta, degrees, s, delta, gt_M = get_M_from_cpd(tf_param, HE_pixel_size, MxIF_pixel_size)
 
     # TODO: add refinement after CPD  (assigned to Jun)
     affine_HE_fn = os.path.join(output_dir, tif_fn)
