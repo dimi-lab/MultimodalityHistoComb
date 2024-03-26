@@ -66,6 +66,19 @@ def get_M_from_cpd(tf_param, source_pix_size, target_pix_size):
 
     return [theta, degrees, s, delta, M]
 
+def get_M_from_cpd_pix(tf_param):
+    R = tf_param.rot
+    T = tf_param.t
+    S = tf_param.scale
+    M = np.array([[S*R[0, 0], R[0, 1], T[1]],
+                  [R[1, 0], S*R[1, 1], T[0]]]).astype(float)
+
+    theta = math.atan(R[1, 0] / R[0, 0])
+    degrees = theta * (180.0 / math.pi)
+    s = tf_param.scale
+    delta = math.sqrt(M[0, 2] ** 2 + M[1, 2] ** 2)
+
+    return [theta, degrees, s, delta, M]
 def save_transformed_HE(he_img, M, target_shape, target_pixel_size, affine_HE_fn):
     affined_image = cv2.warpAffine(src=he_img, M=M, dsize=target_shape)
     res_img = affined_image.astype(np.uint8)
