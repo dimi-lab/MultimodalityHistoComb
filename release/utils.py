@@ -6,7 +6,7 @@ import matplotlib.patches as mpatches
 import math
 import tifffile as tf
 import cv2
-from skimage.measure import label, regionprops
+from skimage.measure import label, regionprops, regionprops_table
 
 def get_cell_loc(HE_quant_fn, col_name_x='Centroid X µm', col_name_y='Centroid Y µm'):
     HE_quant_df = pd.read_csv(HE_quant_fn, sep='\t')
@@ -15,11 +15,15 @@ def get_cell_loc(HE_quant_fn, col_name_x='Centroid X µm', col_name_y='Centroid 
     source = np.array([he_x, he_y]).T
     return source
 
-def get_cell_loc_from_StarDist_pred(pred_lbl):
-    cell_centroids = []
-    for r in regionprops(pred_lbl):
-        cell_centroids.append(list(r.centroid))
-    return cell_centroids
+def get_cell_info_from_StarDist_pred(pred_lbl):
+    # cell_centroids = []
+    # for r in regionprops(pred_lbl):
+    #     cell_centroids.append(list(r.centroid))
+    props = regionprops_table(pred_lbl, properties=('centroid', 'area', 'eccentricity', 'perimeter', 'solidity', 'orientation',
+                                                     'axis_major_length', 'axis_minor_length'))
+    cell_centroids = np.array([props['centroid-0'], props['centroid-1']])
+    cell_morph_features = np.array([props['area'], props['eccentricity'], props['perimeter'], props['solidity'], props['orientation'], props['axis_major_length'], props['axis_minor_length']])
+    return cell_centroids.T, cell_morph_features.T
 
 def apply_aff_trans2points(source, M):
     '''
@@ -51,6 +55,9 @@ def plot_cell_detection(img, cell_centroids, out_dir, fn):
     plt.axis('image')
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, fn))
+
+
+
 
 def get_M_from_cpd(tf_param, source_pix_size, target_pix_size):
     R = tf_param.rot
