@@ -26,9 +26,7 @@ if __name__ == '__main__':
                         required=True,
                         dest="mxif_img_fn",
                         help="target image (MxIF image file), supposed to be ome tiff")
-    parser.add_argument("-v", "--verbose",
-                        dest="verbose",
-                        default=False,
+    parser.add_argument("-v", "--verbose", action="store_true",
                         help="Save debug information"
                         )
     parser.add_argument("-o", "--output_dir",
