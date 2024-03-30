@@ -16,42 +16,42 @@ import functools
 # tensorflow.config.experimental.set_memory_growth(gpus[0], True)
 
 if __name__ == '__main__':
-    # parser = argparse.ArgumentParser()
-    #
-    # parser.add_argument("-is", "--he_img_fn",
-    #                     required=True,
-    #                     dest="he_img_fn",
-    #                     help="source image, H&E image file, supposed to be ome tiff")
-    # parser.add_argument("-it", "--mxif_img_fn",
-    #                     required=True,
-    #                     dest="mxif_img_fn",
-    #                     help="target image (MxIF image file), supposed to be ome tiff")
-    # parser.add_argument("-v", "--verbose",
-    #                     dest="verbose",
-    #                     default=False,
-    #                     help="Save debug information"
-    #                     )
-    # parser.add_argument("-o", "--output_dir",
-    #                     default=os.getcwd(),
-    #                     dest='output_dir',
-    #                     help="Transformed H&E output directory")
-    #
-    # args = parser.parse_args()
-    #
-    # HE_img_fn = args.he_img_fn
-    # MxIF_img_fn = args.mxif_img_fn
-    # output_dir = args.output_dir
-    # verbose = args.verbose
+    parser = argparse.ArgumentParser()
 
-    HE_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section/A-8.tif"
-    MxIF_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/A-8.tif"
-    # HE_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section/B-9.tif"
-    # MxIF_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/B-9.tif"
-    output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_wsi"
-    verbose = True
+    parser.add_argument("-s", "--he_img_fn",
+                        required=True,
+                        dest="he_img_fn",
+                        help="source image, H&E image file, supposed to be ome tiff")
+    parser.add_argument("-t", "--mxif_img_fn",
+                        required=True,
+                        dest="mxif_img_fn",
+                        help="target image (MxIF image file), supposed to be ome tiff")
+    parser.add_argument("-v", "--verbose",
+                        dest="verbose",
+                        default=False,
+                        help="Save debug information"
+                        )
+    parser.add_argument("-o", "--output_dir",
+                        default=os.getcwd(),
+                        dest='output_dir',
+                        help="Transformed H&E output directory")
+
+    args = parser.parse_args()
+
+    HE_img_fn = args.he_img_fn
+    MxIF_img_fn = args.mxif_img_fn
+    output_dir = args.output_dir
+    verbose = args.verbose
+
+    # HE_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section/A-8.tif"
+    # MxIF_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/A-8.tif"
+    # # HE_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section/B-9.tif"
+    # # MxIF_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/B-9.tif"
+    # output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_wsi"
+    # verbose = True
 
     tif_fn = os.path.split(HE_img_fn)[1]
-
+    print("Processing %s" % tif_fn)
     Aff_M_fn = os.path.join(output_dir, tif_fn + "_final_M.npy")
     if not os.path.exists(Aff_M_fn):
         he_cell_cent_fn = os.path.join(output_dir, tif_fn + "_he_cell_centroids.npy")
@@ -221,6 +221,8 @@ if __name__ == '__main__':
                 final_M = CPD_M  # unable to fine tune, use CPD transformation
         else:
             final_M = CPD_M
+        Aff_CPD_M_fn = os.path.join(output_dir, tif_fn + "_CPD_M.npy")
+        np.save(Aff_CPD_M_fn, CPD_M)
         np.save(Aff_M_fn, final_M)  # save the final affine transformation matrix
         ################################################################
         affine_HE_fn = os.path.join(output_dir, tif_fn)
