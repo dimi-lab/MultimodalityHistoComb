@@ -7,7 +7,17 @@ import math
 import tifffile as tf
 import cv2
 from skimage.measure import label, regionprops, regionprops_table
+import argparse
 
+def str2bool(v):
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
 def get_cell_loc(HE_quant_fn, col_name_x='Centroid X µm', col_name_y='Centroid Y µm'):
     HE_quant_df = pd.read_csv(HE_quant_fn, sep='\t')
     he_x = HE_quant_df[col_name_x]

@@ -1,5 +1,5 @@
 import math
-
+from scipy.stats import gaussian_kde
 import numpy as np
 from sklearn.metrics import pairwise_distances
 import networkx as nx
@@ -113,15 +113,44 @@ def draw_graph_with_matching_links(source_g, target_g,
                 plt.gca().add_artist(con)
     plt.show()
 
+
 def check_CPD_GM(CPD_M, GM_M, rot_threshold=1, dis_threshold=20):
     CPD_theta = math.asin(CPD_M[0, 1]) * (180.0 / math.pi)
-    CPD_delta = math.sqrt(CPD_M[0, 2]**2 + CPD_M[1, 2]**2)
+    CPD_delta = math.sqrt(CPD_M[0, 2] ** 2 + CPD_M[1, 2] ** 2)
     GM_theta = math.asin(GM_M[0, 1]) * (180.0 / math.pi)
-    GM_delta = math.sqrt(GM_M[0, 2]**2 + GM_M[1, 2]**2)
-    if abs(CPD_theta-GM_theta) < rot_threshold and abs(CPD_delta-GM_delta) < dis_threshold:
+    GM_delta = math.sqrt(GM_M[0, 2] ** 2 + GM_M[1, 2] ** 2)
+    if abs(CPD_theta - GM_theta) < rot_threshold and abs(CPD_delta - GM_delta) < dis_threshold:
         return True
     else:
         return False
+
+
+def norm(rvalue, newmin, newmax):
+    oldmin = min(rvalue)
+    oldmax = max(rvalue)
+    oldrange = oldmax - oldmin
+    newrange = newmax - newmin
+    if oldrange == 0:  # Deal with the case where rvalue is constant:
+        if oldmin < newmin:  # If rvalue < newmin, set all rvalue values to newmin
+            newval = newmin
+        elif oldmin > newmax:  # If rvalue > newmax, set all rvalue values to newmax
+            newval = newmax
+        else:  # If newmin <= rvalue <= newmax, keep rvalue the same
+            newval = oldmin
+        normal = [newval for _ in rvalue]
+    else:
+        scale = newrange / oldrange
+        normal = [(v - oldmin) * scale + newmin for v in rvalue]
+    return normal
+
+
+def KDE_cell_density(cell_xy):
+    xy = np.vstack([cell_xy[:, 0], cell_xy[:, 1]])
+    kde_scores = gaussian_kde(xy)(xy)
+    norm_kde_scores = norm(kde_scores, 0, 1)
+    return norm_kde_scores
+
+
 def get_M_from_cv2_affine(M, source_pix_size, target_pix_size):
     real_S = source_pix_size / target_pix_size
     M[0, 0] = M[0, 0] * real_S
@@ -131,4 +160,3 @@ def get_M_from_cv2_affine(M, source_pix_size, target_pix_size):
     M[0, 2] = b
     M[1, 2] = a
     return M
-

@@ -10,7 +10,7 @@ pip install opencv-python
 pip install numpy pandas matplotlib 
 
 ```
-## Apply
+## Apply to a case
 ### Start from MxIF and H&E cell segmentation results 
 Require the tsv file exported from QuPath. The tsv file saves the coordinates and staining features of the cells from cell segmentation. Our workflow does not rely on a specific cell segmentation model. You can use any model as long as the segmentation results looks good to you.  
 The original MxIF and H&E images (must be tiff file) were also needed to provide extra information (for example, the size of the target image) or read in the original image and save the transformed image.
@@ -23,9 +23,13 @@ python cli.py -s /opt/HE.tiff.cell_quant.tsv -t /opt/MxIF.tiff.cell_quant.tsv -i
 Different from the previous one. This client code includes the cell segmentation part in the workflow, which means the 
 client takes less input, but it takes longer time to run. 
 Please refer to code [cli_seg.py](cli_seg.py)
+#### Run with CPD (coherent point drift)
 ```shell
-python cli_seg.py -is /opt/HE.tiff  -t /opt/MxIF.tiff -o /opt/temp
+python cli_seg.py -is /opt/HE.tiff  -it /opt/MxIF.tiff -o /opt/temp
 ```
-
+#### Run with CPD+GM  (coherent point drift and graph matching)
+```shell
+python cli_seg_plus.py -s /opt/HE.tiff  -t /opt/MxIF.tiff -o /opt/temp
+```
 
 
