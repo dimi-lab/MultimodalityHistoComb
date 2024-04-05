@@ -9,11 +9,12 @@ from stardist.models import StarDist2D, Config2D
 from csbdeep.utils import Path, normalize
 from gm_utils import *
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 from LPM import *
 import functools
-# import tensorflow
-# gpus = tensorflow.config.list_physical_devices('GPU')
-# tensorflow.config.experimental.set_memory_growth(gpus[0], True)
+import networkx as nx
+import cv2
+import random
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -26,8 +27,9 @@ if __name__ == '__main__':
                         required=True,
                         dest="mxif_img_fn",
                         help="target image (MxIF image file), supposed to be ome tiff")
-    parser.add_argument("-v", "--verbose", action="store_true",
-                        help="Save debug information"
+    parser.add_argument("-v", "--verbose", type=str2bool, nargs='?',
+                        const=True, default=False,
+                        help="Show debug information"
                         )
     parser.add_argument("-o", "--output_dir",
                         default=os.getcwd(),
@@ -40,12 +42,15 @@ if __name__ == '__main__':
     MxIF_img_fn = args.mxif_img_fn
     output_dir = args.output_dir
     verbose = args.verbose
+    print(verbose)
 
+    # HE_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section/A-22.tif"
+    # MxIF_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/A-22.tif"
     # HE_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section/A-8.tif"
     # MxIF_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/A-8.tif"
     # # HE_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section/B-9.tif"
     # # MxIF_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/B-9.tif"
-    # output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_wsi"
+    # output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_wsi/Sec1"
     # verbose = True
 
     tif_fn = os.path.split(HE_img_fn)[1]
@@ -146,7 +151,15 @@ if __name__ == '__main__':
             print("H&E Cell Count: %d" % len(HE_centroids_pix))
             print("MxIF Cell Count: %d" % len(MxIF_centroids_pix))
 
-        HE_selection, HE_nodes_loc = get_points_in_window(trans_HE_centroids_um, location=(520, 620), window_size=50)
+        # sample a window from the densest location
+        sample_wind = 50
+        dense_scores = KDE_cell_density(trans_HE_centroids_um)
+        sample_pos_options_idx = np.array(dense_scores) > 0.75*max(dense_scores)
+        sample_pos_options = trans_HE_centroids_um[sample_pos_options_idx]
+        sample_i = random.choice(range(len(sample_pos_options)))
+        sample_loc = tuple(sample_pos_options[sample_i]-sample_wind/2)
+
+        HE_selection, HE_nodes_loc = get_points_in_window(trans_HE_centroids_um, location=sample_loc, window_size=sample_wind)
         HE_nodes_features = HE_morph_features[HE_selection]
         HE_graph, HE_Adj_M = create_graph_for_point_set(HE_nodes_loc)
         search_range = 1
@@ -156,22 +169,25 @@ if __name__ == '__main__':
         MxIF_nodes_loc = MxIF_centroids_um[MxIF_selection]
         MxIF_nodes_features = MxIF_morph_features[MxIF_selection]
 
-        plt.figure(1)
-        plt.scatter(HE_nodes_loc[:, 1], HE_nodes_loc[:, 0], c='r', s=10)
-        plt.scatter(MxIF_nodes_loc[:, 1], MxIF_nodes_loc[:, 0], c='b', s=10)
-        plt.legend(["HE", "MxIF"])
-        plt.show()
+        if verbose:
+            plt.figure(1)
+            plt.scatter(HE_nodes_loc[:, 1], HE_nodes_loc[:, 0], c='r', s=10)
+            plt.scatter(MxIF_nodes_loc[:, 1], MxIF_nodes_loc[:, 0], c='b', s=10)
+            plt.legend(["HE", "MxIF"])
+            plt.show()
 
         ###############################################3
         ## use CPD again, dosen't work very well
         tf_param_A, sigma2_A, q_A = cpd.registration_cpd(HE_nodes_loc, MxIF_nodes_loc, maxiter=20, tol=1.0e-11,
                                                    update_scale=False)
         trans_HE_nodes_loc = tf_param_A.transform(copy.deepcopy(HE_nodes_loc))
-        plt.figure(1)
-        plt.scatter(trans_HE_nodes_loc[:, 1], trans_HE_nodes_loc[:, 0], c='r', s=10)
-        plt.scatter(MxIF_nodes_loc[:, 1], MxIF_nodes_loc[:, 0], c='b', s=10)
-        plt.legend(["HE", "MxIF"])
-        plt.show()
+
+        if verbose:
+            plt.figure(1)
+            plt.scatter(trans_HE_nodes_loc[:, 1], trans_HE_nodes_loc[:, 0], c='r', s=10)
+            plt.scatter(MxIF_nodes_loc[:, 1], MxIF_nodes_loc[:, 0], c='b', s=10)
+            plt.legend(["HE", "MxIF"])
+            plt.show()
         ###############################################3
         print("Fine tune with graph matching")
         MxIF_graph, MxIF_Adj_M = create_graph_for_point_set(MxIF_nodes_loc)
@@ -181,14 +197,15 @@ if __name__ == '__main__':
         color1 = ['#FF5733' for _ in range(len(HE_nodes_loc))]
         color2 = ['#1f78b4' for _ in range(len(MxIF_nodes_loc))]
 
-        draw_two_graphs(HE_graph, MxIF_graph, pos1, pos2, color1, color2)
-        ################## show graph in the same plot
-        nx.draw_networkx(HE_graph, pos=pos1, edge_color='r', node_color=color1, with_labels=True, node_size=15)
-        nx.draw_networkx(MxIF_graph, pos=pos2, edge_color='b', node_color=color2, with_labels=True, node_size=5)
-        r_patch = mpatches.Patch(color='red', label="HE")
-        b_patch = mpatches.Patch(color='blue', label="MxIF")
-        plt.legend(handles=[r_patch, b_patch])
-        plt.show()
+        if verbose:
+            draw_two_graphs(HE_graph, MxIF_graph, pos1, pos2, color1, color2)
+            ################## show graph in the same plot
+            nx.draw_networkx(HE_graph, pos=pos1, edge_color='r', node_color=color1, with_labels=True, node_size=15)
+            nx.draw_networkx(MxIF_graph, pos=pos2, edge_color='b', node_color=color2, with_labels=True, node_size=5)
+            r_patch = mpatches.Patch(color='red', label="HE")
+            b_patch = mpatches.Patch(color='blue', label="MxIF")
+            plt.legend(handles=[r_patch, b_patch])
+            plt.show()
         ##################
         X = GM_match(HE_Adj_M, MxIF_Adj_M, HE_nodes_features, MxIF_nodes_features)
         ### get matching pairs
@@ -197,15 +214,16 @@ if __name__ == '__main__':
         ###  filtering the matching pairs
         mask = LPM_filter(HE_nodes_loc, sorted_MxIF_nodes_loc)
 
-        ### Draw the matching links before filtering
-        draw_graph_with_matching_links(HE_graph, MxIF_graph,
-                                       pos1, pos2, color1, color2,
-                                       source_match_idx, target_match_idx, filter=None)
+        if verbose:
+            ### Draw the matching links before filtering
+            draw_graph_with_matching_links(HE_graph, MxIF_graph,
+                                           pos1, pos2, color1, color2,
+                                           source_match_idx, target_match_idx, filter=None)
 
-        ## draw the links between matching points after filtering
-        draw_graph_with_matching_links(HE_graph, MxIF_graph,
-                                       pos1, pos2, color1, color2,
-                                       source_match_idx, target_match_idx, filter=mask)
+            ## draw the links between matching points after filtering
+            draw_graph_with_matching_links(HE_graph, MxIF_graph,
+                                           pos1, pos2, color1, color2,
+                                           source_match_idx, target_match_idx, filter=mask)
 
         src_points = HE_centroids_um[HE_selection][mask]
         dst_points = sorted_MxIF_nodes_loc[mask]
