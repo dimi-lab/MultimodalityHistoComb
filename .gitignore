@@ -1,4 +1,3 @@
-
 .idea/.name
 .idea/deployment.xml
 .idea/inspectionProfiles/profiles_settings.xml
@@ -7,3 +6,18 @@
 .idea/modules.xml
 .idea/OVTMA_align.iml
 .idea/vcs.xml
+path_config.py
+release/.idea/deployment.xml
+release/.idea/inspectionProfiles/profiles_settings.xml
+release/.idea/inspectionProfiles/Project_Default.xml
+release/.idea/misc.xml
+release/.idea/modules.xml
+release/.idea/release.iml
+release/.idea/vcs.xml
+Alignment/A-6_QUANT_MxIF.tsv
+Alignment/A-6_QUANT_HE.tsv
+Alignment/A-22_QUANT_MxIF.tsv
+Alignment/A-22_QUANT_HE.tsv
+__pycache__/path_config.cpython-38.pyc
+.idea/OV_TMA_Cotrain.iml
+.idea/other.xml
