@@ -51,7 +51,7 @@ for i in core_list:
     file_name = os.path.join(HE_export_dir, i.strip().replace(".tif", "_align_anno_8.csv"))
     file_name_list.append(file_name)
 
-PIX = True  # the export landmarks were pixel-based rather than um-based
+# the export landmarks were pixel-based rather than um-based
 HE_pixel_size = 0.2201  # unit micron
 MxIF_pixel_size = 0.325
 #########################################
@@ -69,21 +69,8 @@ for fn in file_name_list:
     HE_landmarks_fn = os.path.join(HE_export_dir, csv_fn)
     MxIF_landmarks_fn = os.path.join(MxIF_export_dir, csv_fn)
     point_sort_fn = os.path.join(data_root_dir, "GroundTruthAnnotation", "Landmark_correspondence", "Sec%d" %Sec, roi_id+".csv")
+
     sorted_HE_landmarks, sorted_MxIF_landmarks = get_sorted_annotation_landmark_pairs(HE_landmarks_fn, MxIF_landmarks_fn, point_sort_fn)
-    
-    # with open(HE_landmarks_fn) as f:
-    #     lines = (line for line in f if not line.startswith('x'))
-    #     HE_landmarks = np.loadtxt(lines, delimiter=',', skiprows=0)
-    # with open(MxIF_landmarks_fn) as f:
-    #     lines = (line for line in f if not line.startswith('x'))
-    #     MxIF_landmarks = np.loadtxt(lines, delimiter=',', skiprows=0)
-    # assert len(HE_landmarks) == len(MxIF_landmarks)
-    #
-    #
-    #
-    # # sorted_HE_landmarks = HE_landmarks
-    # sorted_HE_landmarks = HE_landmarks[HE_landmarks[:, 0].argsort()]
-    # sorted_MxIF_landmarks = MxIF_landmarks[MxIF_landmarks[:, 0].argsort()]
 
     if DEBUG_1:
         fig, ax = plt.subplots(1, 2)
@@ -138,10 +125,9 @@ for fn in file_name_list:
             plt.legend(["HE_landmarks", "MxIF_landmarks", "trans_HE_landmarks"])
             plt.show()
 
-    trans_fn = os.path.join(ground_truth_output_dir, roi_id + "_gt_trans.dat")
+    trans_fn = os.path.join(ground_truth_output_dir, roi_id + "_gt_trans.npy")
     data = MM/len(comb)
-    with open(trans_fn, "wb") as f:
-        pickle.dump(data, f)
+    np.save(trans_fn, data)
 
     trans_csv_fn = os.path.join(ground_truth_output_dir, roi_id + "_gt_trans_comb.csv")
     fp = open(trans_csv_fn, 'w')
