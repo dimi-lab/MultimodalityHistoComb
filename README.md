@@ -21,8 +21,13 @@ pip install cupy
 ### Preprocessing
 #### TMA de-array
 De-array is a process that gets the tissue core out of the whole slide image, and then save the cores into FOV images.
+
+> See [De-array](Dearray/Readme.md) for more detail
+
 #### Cell segmentation
 StarDist was used as our baseline for cell segmentation. However, our framework is portable to different cell segmentation methods.
+
+> See [Cell detection](CellDetection/Readme.md) for more detail
 ### Cell spatial co-localization 
 Image Alignment
 ![Alignment](./imgs/alignment.png)
