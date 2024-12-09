@@ -13,7 +13,7 @@ from sys import platform
 Sec = 1
 
 if platform == "linux" or platform == "linux2":
-    data_root_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/AlignmentEval"
+    data_root_dir = "/temp/Ovarian_TMA/AlignmentEval"
     if Sec == 1:
         # Sec1
         ground_truth_output_dir = os.path.join(data_root_dir, "GroundTruthEvaluation", "GT_HE_Sec1_MxIF")

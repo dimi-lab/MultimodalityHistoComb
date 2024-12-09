@@ -35,9 +35,9 @@ if __name__ == '__main__':
     output_dir = args.output_dir
     verbose = args.verbose
 
-    # HE_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section/A-8.tif"
-    # MxIF_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/A-8.tif"
-    # output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_wsi"
+    # HE_img_fn = "/temp/Ovarian_TMA/HE_FOVs/same_section/A-8.tif"
+    # MxIF_img_fn = "/temp/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/A-8.tif"
+    # output_dir = "/temp/Ovarian_TMA/test_align_wsi"
     # verbose = True
 
     tif_fn = os.path.split(HE_img_fn)[1]

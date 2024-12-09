@@ -15,7 +15,7 @@ for core in core_list:
     roi_id = core.split(".")[0]
     roi_id_list.append(roi_id)
 
-data_root_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/AlignmentEval"
+data_root_dir = "/temp/Ovarian_TMA/AlignmentEval"
 if Sec == 1:
     # Sec1
     ground_truth_output_dir = os.path.join(data_root_dir, "GroundTruthEvaluation", "GT_HE_Sec1_MxIF")
@@ -29,10 +29,10 @@ else:
 
 MxIF_export_dir = os.path.join(data_root_dir, "GroundTruthAnnotation", "MxIF_Sec1")
 
-gt_data_root = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/AlignmentEval/GroundTruthEvaluation"
+gt_data_root = "/temp/Ovarian_TMA/AlignmentEval/GroundTruthEvaluation"
 
-qupath_results_root = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_seg_qupath"
-results_root = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_wsi"
+qupath_results_root = "/temp/Ovarian_TMA/test_align_seg_qupath"
+results_root = "/temp/Ovarian_TMA/test_align_wsi"
 
 def draw_points(source_points, target_points, title):
     plt.figure(1)

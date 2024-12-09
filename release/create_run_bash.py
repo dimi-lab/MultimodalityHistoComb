@@ -1,12 +1,12 @@
 import os
 
 core_list_fn = "core_list.txt"
-HE_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section"
-MxIF_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex"
-MxIF_quant_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/AlignmentEval/QuPathAnnoProj_MxIF/export"
-HE_quant_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/AlignmentEval/QuPathAnnoProj_HE_Sec1/export"
+HE_dir = "/temp/Ovarian_TMA/HE_FOVs/same_section"
+MxIF_dir = "/temp/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex"
+MxIF_quant_dir = "/temp/Ovarian_TMA/AlignmentEval/QuPathAnnoProj_MxIF/export"
+HE_quant_dir = "/temp/Ovarian_TMA/AlignmentEval/QuPathAnnoProj_HE_Sec1/export"
 
-output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_seg_qupath/Sec1"
+output_dir = "/temp/Ovarian_TMA/test_align_seg_qupath/Sec1"
 core_list = open(core_list_fn, 'r').readlines()
 wrt_str = ""
 for i in core_list:
@@ -23,7 +23,7 @@ fp.write(wrt_str)
 fp.close()
 
 
-output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_seg_qupath/Sec2"
+output_dir = "/temp/Ovarian_TMA/test_align_seg_qupath/Sec2"
 wrt_str = ""
 for i in core_list:
     i = i.strip()

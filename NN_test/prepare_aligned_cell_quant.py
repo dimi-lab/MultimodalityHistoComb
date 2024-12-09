@@ -22,10 +22,10 @@ import cv2
 import tifffile as tf
 from scipy.spatial import KDTree
 
-FOV_img_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA"
-data_root_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/AlignmentEval"
-output_quant_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/AlignmentEval/ApplyAlignment/AlignedCellsQuant"
-output_data_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/AlignmentEval/ApplyAlignment/AlignedCells"
+FOV_img_dir = "/temp/Ovarian_TMA"
+data_root_dir = "/temp/Ovarian_TMA/AlignmentEval"
+output_quant_dir = "/temp/Ovarian_TMA/AlignmentEval/ApplyAlignment/AlignedCellsQuant"
+output_data_dir = "/temp/Ovarian_TMA/AlignmentEval/ApplyAlignment/AlignedCells"
 DEBUG_Plot = 0  #
 SAVE_TRANSFORMED_HE = 0
 

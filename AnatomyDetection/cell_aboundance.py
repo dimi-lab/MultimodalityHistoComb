@@ -36,10 +36,10 @@ def KDE_cell_density(cell_xy):
 if __name__ == "__main__":
     CheckCellsWithNullFeatures = True
     Debug = True
-    # output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/output/utag_clustering/MxIF"
-    # data_root_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/OV_TMA_MxIF_QuPath_proj_AB/export"
-    output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/output/utag_clustering/HE"
-    data_root_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/OV_TMA_HE_QuPath_proj_AB/export"
+    # output_dir = "/temp/Ovarian_TMA/output/utag_clustering/MxIF"
+    # data_root_dir = "/temp/Ovarian_TMA/OV_TMA_MxIF_QuPath_proj_AB/export"
+    output_dir = "/temp/Ovarian_TMA/output/utag_clustering/HE"
+    data_root_dir = "/temp/Ovarian_TMA/OV_TMA_HE_QuPath_proj_AB/export"
     roi_list = natsorted(os.listdir(data_root_dir))
     for idx, roi_id in enumerate(roi_list):
         # roi_id = 'A-1'

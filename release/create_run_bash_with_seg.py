@@ -1,9 +1,9 @@
 import os
 
 core_list_fn = "core_list.txt"
-HE_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section"
-MxIF_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex"
-output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_wsi/Sec1"
+HE_dir = "/temp/Ovarian_TMA/HE_FOVs/same_section"
+MxIF_dir = "/temp/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex"
+output_dir = "/temp/Ovarian_TMA/test_align_wsi/Sec1"
 
 core_list = open(core_list_fn, 'r').readlines()
 wrt_str = ""
@@ -18,7 +18,7 @@ fp.write(wrt_str)
 fp.close()
 
 
-output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_wsi/Sec2"
+output_dir = "/temp/Ovarian_TMA/test_align_wsi/Sec2"
 wrt_str = ""
 for i in core_list:
     i = i.strip()

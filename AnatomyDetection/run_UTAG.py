@@ -41,10 +41,10 @@ def visualize_rois(adata, n_rois=3, roi_key='roi', color_key='cell type', dpi=20
         plt.savefig(save_to)
 
 if __name__ == "__main__":
-    output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/output/utag_clustering/MxIF"
-    data_root_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/OV_TMA_MxIF_QuPath_proj_AB/export"
-    # output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/output/utag_clustering/HE"
-    # data_root_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/OV_TMA_HE_QuPath_proj_AB/export"
+    output_dir = "/temp/Ovarian_TMA/output/utag_clustering/MxIF"
+    data_root_dir = "/temp/Ovarian_TMA/OV_TMA_MxIF_QuPath_proj_AB/export"
+    # output_dir = "/temp/Ovarian_TMA/output/utag_clustering/HE"
+    # data_root_dir = "/temp/Ovarian_TMA/OV_TMA_HE_QuPath_proj_AB/export"
     roi_list = sorted(os.listdir(data_root_dir))
 
     resolutions_list = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]

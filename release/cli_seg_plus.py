@@ -44,13 +44,13 @@ if __name__ == '__main__':
     verbose = args.verbose
     print(verbose)
 
-    # HE_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section/A-22.tif"
-    # MxIF_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/A-22.tif"
-    # HE_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section/A-8.tif"
-    # MxIF_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/A-8.tif"
-    # # HE_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section/B-9.tif"
-    # # MxIF_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/B-9.tif"
-    # output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_wsi/Sec1"
+    # HE_img_fn = "/temp/Ovarian_TMA/HE_FOVs/same_section/A-22.tif"
+    # MxIF_img_fn = "/temp/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/A-22.tif"
+    # HE_img_fn = "/temp/Ovarian_TMA/HE_FOVs/same_section/A-8.tif"
+    # MxIF_img_fn = "/temp/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/A-8.tif"
+    # # HE_img_fn = "/temp/Ovarian_TMA/HE_FOVs/same_section/B-9.tif"
+    # # MxIF_img_fn = "/temp/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/B-9.tif"
+    # output_dir = "/temp/Ovarian_TMA/test_align_wsi/Sec1"
     # verbose = True
 
     tif_fn = os.path.split(HE_img_fn)[1]

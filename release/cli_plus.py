@@ -46,11 +46,11 @@ if __name__ == '__main__':
     output_dir = args.output_dir
     verbose = args.verbose
 
-    # HE_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/HE_FOVs/same_section/A-8.tif"
-    # MxIF_img_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/A-8.tif"
-    # MxIF_quant_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/AlignmentEval/QuPathAnnoProj_MxIF/export/A-8_StarDist_QUANT.tsv"
-    # HE_quant_fn = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/AlignmentEval/QuPathAnnoProj_HE_Sec1/export/A-8_StarDist_QUANT.tsv"
-    # output_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/test_align_seg_qupath"
+    # HE_img_fn = "/temp/Ovarian_TMA/HE_FOVs/same_section/A-8.tif"
+    # MxIF_img_fn = "/temp/Ovarian_TMA/MxIF_FOVs/Slide2050_24Plex/A-8.tif"
+    # MxIF_quant_fn = "/temp/Ovarian_TMA/AlignmentEval/QuPathAnnoProj_MxIF/export/A-8_StarDist_QUANT.tsv"
+    # HE_quant_fn = "/temp/Ovarian_TMA/AlignmentEval/QuPathAnnoProj_HE_Sec1/export/A-8_StarDist_QUANT.tsv"
+    # output_dir = "/temp/Ovarian_TMA/test_align_seg_qupath"
     # verbose = True
 
     # TODO: read pixel size from the image tags

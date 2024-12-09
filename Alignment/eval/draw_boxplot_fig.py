@@ -8,7 +8,7 @@ import natsort
 import seaborn as sns
 import statistics
 
-data_root_dir = "/infodev1/non-phi-data/junjiang/Ovarian_TMA/AlignmentEval"
+data_root_dir = "/temp/Ovarian_TMA/AlignmentEval"
 aa_root_dir = os.path.join(data_root_dir, "ApplyAlignment")
 def get_TMA_core_list(img_path: str) -> list:
     img_fn_list = os.listdir(img_path)
