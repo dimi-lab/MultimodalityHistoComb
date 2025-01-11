@@ -43,9 +43,15 @@ There are two options to run the client:
 Figure 2. Illustration of alignment algorithms and alignment accuracy evaluation method. 
 
 ### Cell feature validation
+H&E-stained images are commonly used to provide cell-level referencing when MxIF images are inspected. Ideally, the same tissue section used for MxIF should be restained with H&E after
+the MxIF scanning to ensure identical referencing. However, the tissue may become damaged after multiple rounds of MxIF imaging, resulting in incomplete or compromised H&E staining. Many studies use the serial sections from the same tissue block for H&E staining. But, how reliable are serial section H&E images as references for MxIF analysis when restained H&E is not available?
 
+Our evaluations on staining and morphology feature for both re-stained and serial sections showed that restained section provide significantly higher concordance in cell features. 
 
-Staining and morphology feature concordance for both re-stained and serial sections.
+To run similar feature validation, check the code [here](release/eval/cell_feature_eval.py). Please ensure the morphology and staining features are in the list.
+> Define your [morphology features](https://github.com/dimi-lab/MultimodalityHistoComb/blob/71385b4f4945e3e31fd8c614af75e0ec8aa3049c/release/eval/cell_feature_eval.py#L22).
+> Define your staining features for [H&E](https://github.com/dimi-lab/MultimodalityHistoComb/blob/71385b4f4945e3e31fd8c614af75e0ec8aa3049c/release/eval/cell_feature_eval.py#L27) and [MxIF](https://github.com/dimi-lab/MultimodalityHistoComb/blob/71385b4f4945e3e31fd8c614af75e0ec8aa3049c/release/eval/cell_feature_eval.py#L30).
+
 ![Feature validation](./imgs/feature_validation.png)
 
 ### Virtual H&E generation
