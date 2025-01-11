@@ -34,6 +34,7 @@ The cell co-localization was formulated as a point set alignment problem. Using 
 initial alignment, followed by Graph Matching (GM) for refinement. The alignment accuracy was evaluated with 1) Distances between landmarks after transformation and target landmarks. 2) Rotation and translation differences between automatic method and manual annotation. 
 
 > Check the client code [here](release/readme.md)
+
 There are two options to run the client:
 * [start from cell segmentation results](/release#start-from-mxif-and-he-cell-segmentation-results);
 * [directly from the H&E and MxIF images](release#directly-start-from-mxif-and-he-image).
