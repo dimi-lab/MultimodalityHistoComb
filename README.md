@@ -25,12 +25,23 @@ De-array is a process that gets the tissue core out of the whole slide image, an
 > See [De-array](Dearray/Readme.md) for more detail
 
 #### Cell segmentation
-StarDist was used as our baseline for cell segmentation. However, our framework is portable to different cell segmentation methods.
+StarDist was used as our baseline for cell segmentation. However, our alignment framework is portable to different cell segmentation methods, as it only rely on detected cell centroids.
 
 > See [Cell detection](CellDetection/Readme.md) for more detail
+We also provide a version of code which integrated StarDist cell segmentation into the alignment framework.
+
+> Check the code [here](release/readme.md)
 ### Cell spatial co-localization 
-Image Alignment
+The cell co-localization was formulated as a point set alignment problem. Using cell detection outputs from each modality as anchors, Coherent Point Drift (CPD) was employed for
+initial alignment, followed by Graph Matching (GM) for refinement. The alignment accuracy was evaluated with 1) Distances between landmarks after transformation and target landmarks. 2) Rotation and translation differences between automatic method and manual annotation. 
+
+> Check the client code [here](release/readme.md)
+There are two options to run the client:
+* [start from cell segmentation results](/release#start-from-mxif-and-he-cell-segmentation-results);
+* [directly from the H&E and MxIF images](release#directly-start-from-mxif-and-he-image).
+
 ![Alignment](./imgs/alignment.png)
+Figure 2. Illustration of alignment algorithms and alignment accuracy evaluation method. 
 
 ### Cell feature validation
 
