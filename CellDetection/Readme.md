@@ -1,10 +1,18 @@
-Detect cells within MxIF, H&E and IHC images respectively.
+To run our alignment, cells within MxIF and H&E images need to be detected respectively. We used StarDist as our baseline for both H&E and MxIF, as there are pretrained model available. 
 
+Cell segmentation methods we tried.
 ## H&E cell segmentation
 StarDist: https://qupath.readthedocs.io/en/0.4/docs/deep/stardist.html
+Watershed in QuPath
+HoverNet: https://github.com/vqdang/hover_net
+
+## MxIF cell segmentation
+DeepCell: https://gist.github.com/petebankhead/db8548a0112bad089492061bf8046430
+StarDist: https://qupath.readthedocs.io/en/0.4/docs/deep/stardist.html
+Watershed in QuPath
 
 
-
+## Other options and references:
 DeepLIIF: An Online Platform for Quantification of Clinical ...
 There are currently three tools that are available as web apps, 
 namely DeepCell (https://deepcell.org/) [2, 6], 
@@ -22,18 +30,9 @@ papers:
 DeepLIIF: An Online Platform for Quantification of Clinical Pathology Slides
 DeepSMILE: Contrastive self-supervised pre-training benefits MSI and HRD classification directly from H&E whole-slide images in colorectal and breast cancer
 
-
 Question:
 1. which tool for which modality?
 2. how to evaluate the segmentation accuracy?
-
-## MxIF cell segmentation
-DeepCell:
-https://gist.github.com/petebankhead/db8548a0112bad089492061bf8046430
-
-
-
-
 
 
 
