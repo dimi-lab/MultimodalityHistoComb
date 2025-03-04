@@ -14,7 +14,7 @@ Cell segmentation methods we tried.
 
 ## TODO:
 1. Evaluate the segmentation accuracy
-2. which tool works best for
+2. which tool works best for which modality?
 
 ### Other options and references:
 1. DeepLIIF: An Online Platform for Quantification of Clinical Pathology Slides
