@@ -53,9 +53,9 @@ if not DEBUG:
     parser.add_argument("--output_filetype", default="png", choices=["png", "jpeg"])
     a = parser.parse_args()
 else:
-    patch_root_dir="/infodev1/non-phi-data/junjiang/Ovarian_TMA/virtual_HE/dataset/ImgPair"   # directory where saves image patch pairs for training
-    training_case_txt="/infodev1/non-phi-data/junjiang/Ovarian_TMA/virtual_HE/dataset/training_cases.txt"  # directory where saves WSI training cases
-    Train_output="/infodev1/non-phi-data/junjiang/Ovarian_TMA/virtual_HE/model_training"  # Output directory to save trained models.
+    patch_root_dir="/data_folder/Ovarian_TMA/virtual_HE/dataset/ImgPair"   # directory where saves image patch pairs for training
+    training_case_txt="/data_folder/Ovarian_TMA/virtual_HE/dataset/training_cases.txt"  # directory where saves WSI training cases
+    Train_output="/data_folder/Ovarian_TMA/virtual_HE/model_training"  # Output directory to save trained models.
 
     a = argparse.Namespace()
     a.input_patch_root_dir = patch_root_dir
