@@ -7,3 +7,8 @@
 3. Train the model [script](train_eval/training.sh)
 4. Evaluate the model [script](train_eval/eval.sh)
 
+
+### Blind test 
+We also created a blind test on Google Forms.
+The script can be found [here](downstream/TF_test/load_virtual_HE.gs)
+![alt text](downstream/TF_test/blind_test.jpeg)
