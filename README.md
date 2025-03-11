@@ -59,6 +59,7 @@ Figure 3. Cell feature concordance under different conditions.
 ### Virtual H&E generation
 Many MxIF platforms offer virtual H&E images as the "re-stained H&E reference" for reliable MxIF interpretation. However, the quality of virtual H&E is often insufficient for clinical purposes.Can high-quality virtual H&E images be generated from MxIF data to serve as a reliable reference, similar to restained H&E?
 
+We propose to use image channels from MxIF (e.g. DAPI, NAK, PANCK) to generate virtual H&E images for referencing. More details can be found in [this folder](virtualHE), including the code and documents for generating virual H&E and evaluating the quality of generated images. 
 
 ![Virtual H&E](./imgs/virtualHE.png)
 Figure 4. Generate virtual H&E when re-stained H&E image is not available. Evaluation demonstrated that the generated virtual H&E and real H&E share similar cell population.
