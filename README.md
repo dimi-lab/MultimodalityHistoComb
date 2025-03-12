@@ -21,7 +21,7 @@ pip install cupy
 ### Preprocessing
 #### TMA de-array
 De-array is a process that gets the tissue core out of the whole slide image, and then save the cores into FOV images.
-An pair of H&E and MxIF TMA core images were available on [GoogleDrive](https://drive.google.com/drive/folders/1LztTTYXUyHZbXG4ZgfE-ftwpCxdGvAZz?usp=sharing).
+An pair of H&E and MxIF TMA core images can be downloaded from [GoogleDrive](https://drive.google.com/drive/folders/1LztTTYXUyHZbXG4ZgfE-ftwpCxdGvAZz?usp=sharing).More data will be available soon.
 
 > See [De-array](Dearray/Readme.md) for more detail
 
