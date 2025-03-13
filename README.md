@@ -39,7 +39,7 @@ initial alignment, followed by Graph Matching (GM) for refinement. The alignment
 There are two options to run the client:
 * [Start from cell segmentation results](/release#start-from-mxif-and-he-cell-segmentation-results);
 * [Directly from the H&E and MxIF images](release#directly-start-from-mxif-and-he-image).
-
+Please be aware that the two options could use different StarDist implementations (Python and QuPath versions) which may generate different cell segmentation results.
 ![Alignment](./imgs/alignment.png)
 Figure 2. Illustration of alignment algorithms and alignment accuracy evaluation method. 
 
