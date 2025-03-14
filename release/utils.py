@@ -46,9 +46,9 @@ def apply_aff_trans2points(source, M):
 
 def plot_centroids_trans(s_points, t_points, t_s_points, legend, title, out_dir, fn):
     plt.figure(dpi=300)
-    plt.scatter(s_points[:, 1], s_points[:, 0], c='r', s=1)
-    plt.scatter(t_points[:, 1], t_points[:, 0],  c='g', s=1)
-    plt.scatter(t_s_points[:, 1], t_s_points[:, 0], c='b', s=1)
+    plt.scatter(s_points[:, 1], s_points[:, 0], c='r', marker="^", s=1, alpha=0.2)
+    plt.scatter(t_points[:, 1], t_points[:, 0],  c='g', marker=".",s=1, alpha=0.7)
+    plt.scatter(t_s_points[:, 1], t_s_points[:, 0], c='b',marker="*", s=1, alpha=0.7)
     r_patch = mpatches.Patch(color='red', label=legend[0])
     g_patch = mpatches.Patch(color='green', label=legend[1])
     b_patch = mpatches.Patch(color='blue', label=legend[2])
