@@ -12,11 +12,11 @@ Figure 1. Overview of our framework. A) MxIF and H&E images to be aligned; B) Ce
 conda create --prefix /path_to_your_envs/alignment python=3.8.2
 conda activate alignment
 pip install scikit-learn
-pip install probreg==0.3.5
+pip install probreg==0.3.7
 pip install pygmtools
 pip install cupy
 ```
-> There is issue to run the code with version 0.3.5 or after, like 0.3.8
+> There is issue to run the code with version 0.3.8 or after, like 0.3.8
 > Python version <= 3.11.11 
 ## Modules
 ### Preprocessing
