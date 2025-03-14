@@ -9,7 +9,7 @@ from matplotlib.patches import ConnectionPatch
 from scipy.spatial import KDTree
 import functools
 from csbdeep.utils import Path, normalize
-
+from scipy.spatial import Delaunay
 
 def get_points_in_window(all_points, location=(500, 600), window_size=100):
     x_idx2 = np.logical_and(all_points[:, 0] > location[0], all_points[:, 0] < location[0] + window_size)
@@ -25,6 +25,27 @@ def create_graph_for_point_set(points, dis=15):
     np.fill_diagonal(Adj_Matrix, 0)
     G1 = nx.from_numpy_array(Adj_Matrix)
     return G1, Adj_Matrix
+
+def create_delaunay_graph(node_features):
+    """
+    Creates a Delaunay graph from node features and returns the graph and its adjacency matrix.
+    Args:
+        node_features (numpy.ndarray): An array of node features, where each row represents a node 
+                                      and columns represent feature dimensions (e.g., x, y coordinates).
+    Returns:
+        tuple: A tuple containing the Delaunay graph (networkx.Graph) and its 
+               adjacency matrix (scipy.sparse.csr_matrix).
+    """
+    tri = Delaunay(node_features)
+    graph = nx.Graph()
+    graph.add_nodes_from(range(node_features.shape[0]))
+    for simplex in tri.simplices:
+        for i in range(len(simplex)):
+            for j in range(i + 1, len(simplex)):
+                graph.add_edge(simplex[i], simplex[j])
+    
+    adjacency_matrix = nx.adjacency_matrix(graph).toarray()
+    return graph, adjacency_matrix
 
 
 def draw_two_graphs(G1, G2, pos1, pos2, color1, color2):
@@ -84,11 +105,27 @@ def get_matching_pairs(source_match_idx, X, target_nodes_loc, MxIF_selection):
         sorted_MxIF_nodes_idx.append(MxIF_selection[sn])
     return np.array(sorted_MxIF_nodes_loc), np.array(sorted_MxIF_nodes_idx), match_idx_target
 
+def filter_by_slope(s_match_node_loc, t_match_node_loc, dist=250, thr=0.5):
+    s_match_node_loc_new =  np.array(s_match_node_loc)
+    s_match_node_loc_new[:, 0] + dist 
+    mask = []
+    for i in range(len(s_match_node_loc_new)):
+        x1, y1 = s_match_node_loc_new[i, 0], s_match_node_loc_new[i, 1]
+        x2, y2 = t_match_node_loc[i, 0], t_match_node_loc[i, 1]
+        if x2 - x1 == 0:
+            slope = float('inf')  # Slope is undefined if x2 - x1 is zero
+        else:
+            slope = (y2 - y1) / (x2 - x1)
+        if abs(slope) > thr:
+            mask.append(True)
+        else:
+            mask.append(False)
+    return mask
 
 def draw_graph_with_matching_links(source_g, target_g,
                                    source_pos, target_pos, source_color, target_color,
-                                   source_match_idx, target_match_idx, filter=None):
-    plt.figure(figsize=(8, 4))
+                                   source_match_idx, target_match_idx, sv_fn, filter=None):
+    plt.figure(figsize=(8, 4), dpi=250)
     ax1 = plt.subplot(1, 2, 1)
     plt.title('Source')
     plt.gca().margins(0.4)
@@ -111,7 +148,9 @@ def draw_graph_with_matching_links(source_g, target_g,
                 con = ConnectionPatch(xyA=source_pos[i], xyB=target_pos[j], coordsA="data", coordsB="data",
                                       axesA=ax1, axesB=ax2, color="green")
                 plt.gca().add_artist(con)
-    plt.show()
+    # plt.show()
+    plt.savefig(sv_fn)
+    plt.close()
 
 
 def check_CPD_GM(CPD_M, GM_M, rot_threshold=1, dis_threshold=20):
