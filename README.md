@@ -16,7 +16,8 @@ pip install probreg==0.3.7
 pip install pygmtools
 pip install cupy
 ```
-> There is issue to run the code with version 0.3.8 or after, like 0.3.8
+> There is issue to run the code with version 0.3.8
+
 > Python version <= 3.11.11 
 ## Modules
 ### Preprocessing
