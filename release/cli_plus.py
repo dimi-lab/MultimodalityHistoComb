@@ -57,14 +57,30 @@ if __name__ == '__main__':
     HE_pixel_size = 0.2201  # unit micron
     MxIF_pixel_size = 0.325
 
+
+    morp_features = ["Nucleus: Area µm^2", "Nucleus: Length µm", "Nucleus: Circularity", "Nucleus: Solidity",
+                 "Nucleus: Max diameter µm", "Nucleus: Min diameter µm", "Cell: Area µm^2", "Cell: Length µm",
+                 "Cell: Circularity", "Cell: Solidity", "Cell: Max diameter µm", "Cell: Min diameter µm",
+                 "Nucleus/Cell area ratio"]
+
+    HE_H_stain_features = ["Hematoxylin: Nucleus: Mean", "Hematoxylin: Nucleus: Median", "Hematoxylin: Nucleus: Min",
+                        "Hematoxylin: Nucleus: Max", "Hematoxylin: Nucleus: Std.Dev."]
+
+    MxIF_DAPI_stain_features = ["DAPI_AF_R01: Nucleus: Mean", "DAPI_AF_R01: Nucleus: Median", "DAPI_AF_R01: Nucleus: Min",
+                                "DAPI_AF_R01: Nucleus: Max", "DAPI_AF_R01: Nucleus: Std.Dev."]
+
     tif_fn = os.path.split(HE_img_fn)[1]
     print("Processing %s" % tif_fn)
     Aff_M_fn = os.path.join(output_dir, tif_fn + "_final_M.npy")
     Aff_CPD_M_fn = os.path.join(output_dir, tif_fn + "_CPD_M.npy")
     if not os.path.exists(Aff_M_fn) or not os.path.exists(Aff_CPD_M_fn):
-        print("\t Loading cell segmentation.")
-        HE_centroids_um, HE_morph_features = get_cell_info_from_QuPath(HE_quant_fn)   # you may need to specify column names to get the cell coordinates
-        MxIF_centroids_um, MxIF_morph_features = get_cell_info_from_QuPath(MxIF_quant_fn)
+        print("\t Loading cell quantification.")
+        MxIF_df = pd.read_table(MxIF_quant_fn, sep='\t', header=0)
+        HE_df = pd.read_table(HE_quant_fn, sep='\t', header=0)
+
+        HE_centroids_um = get_cell_loc(HE_quant_fn)
+        MxIF_centroids_um = get_cell_loc(MxIF_quant_fn)
+
         print("\t Aligning with CPD.")
         tf_param, sigma2, q = cpd.registration_cpd(HE_centroids_um, MxIF_centroids_um, maxiter=20, tol=1.0e-11,
                                                    update_scale=False)
@@ -78,7 +94,7 @@ if __name__ == '__main__':
         theta, degrees, s, delta, CPD_M = get_M_from_cpd(tf_param, HE_pixel_size, MxIF_pixel_size)
 
         #  refinement after CPD
-        sample_wind = 50
+        sample_wind = 100
         dense_scores = KDE_cell_density(trans_HE_centroids_um)
         sample_pos_options_idx = np.array(dense_scores) > 0.75 * max(dense_scores)
         sample_pos_options = trans_HE_centroids_um[sample_pos_options_idx]
@@ -87,14 +103,19 @@ if __name__ == '__main__':
 
         HE_selection, HE_nodes_loc = get_points_in_window(trans_HE_centroids_um, location=sample_loc,
                                                           window_size=sample_wind)
-        HE_nodes_features = HE_morph_features[HE_selection]
+        HE_nodes_features = HE_df.loc[HE_selection, morp_features+HE_H_stain_features].values
+        HE_nodes_features = np.hstack((HE_nodes_features, HE_nodes_loc))
+        HE_nodes_features = (HE_nodes_features - HE_nodes_features.min(axis=0)) / (HE_nodes_features.max(axis=0) - HE_nodes_features.min(axis=0))
+
         HE_graph, HE_Adj_M = create_graph_for_point_set(HE_nodes_loc)
         search_range = 1
         q_MxIF_nodes_dis, q_MxIF_idx = create_graph_use_query(HE_nodes_loc, MxIF_centroids_um, K=search_range)
 
         MxIF_selection = list(set(np.array(q_MxIF_idx).flatten()))
         MxIF_nodes_loc = MxIF_centroids_um[MxIF_selection]
-        MxIF_nodes_features = MxIF_morph_features[MxIF_selection]
+        MxIF_nodes_features = MxIF_df.loc[MxIF_selection, morp_features+MxIF_DAPI_stain_features].values
+        MxIF_nodes_features = np.hstack((MxIF_nodes_features, MxIF_nodes_loc))
+        MxIF_nodes_features = (MxIF_nodes_features - MxIF_nodes_features.min(axis=0)) / (MxIF_nodes_features.max(axis=0) - MxIF_nodes_features.min(axis=0))
 
         print("\t Fine tune with graph matching")
         MxIF_graph, MxIF_Adj_M = create_graph_for_point_set(MxIF_nodes_loc)

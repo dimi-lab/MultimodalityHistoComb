@@ -64,7 +64,7 @@ def GM_match(source_Adj_M, target_Adj_M, source_node_features, target_node_featu
                                  n_target, None,
                                  edge_aff_fn=aff)
 
-    np.fill_diagonal(K, 0)
+    # np.fill_diagonal(K, 0)
     # X = pygm.rrwm(K, n_source, n_target, max_iter=5, alpha=0, beta=30)
     X = pygm.ipfp(K, n_source, n_target)
     X = pygm.sinkhorn(X)
