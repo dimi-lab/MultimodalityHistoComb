@@ -21,3 +21,4 @@ Alignment/A-22_QUANT_HE.tsv
 __pycache__/path_config.cpython-38.pyc
 .idea/OV_TMA_Cotrain.iml
 .idea/other.xml
+*.pyc
