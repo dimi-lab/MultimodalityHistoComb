@@ -11,7 +11,15 @@ import pandas as pd
 import torch
 import tifffile as tf
 from STalign import STalign
-from utils import get_cell_loc
+import math
+
+def get_cell_loc(HE_quant_fn, col_name_x='Centroid X µm', col_name_y='Centroid Y µm'):
+    HE_quant_df = pd.read_csv(HE_quant_fn, sep='\t')
+    he_x = HE_quant_df[col_name_x]
+    he_y = HE_quant_df[col_name_y]
+    source = np.array([he_x, he_y]).T
+    return source
+
 
 HE_img_fn = "/Users/jjiang10/Data/OV_TMA/HE_H-13.tif"
 HE_quant_fn = "/Users/jjiang10/Data/OV_TMA/AlignedCellQuant/H-13_1on1_HE_quant.tsv"
@@ -34,14 +42,14 @@ XI = np.array(range(I.shape[2]))*1. # needs to be longs not doubles for STalign.
 extentI = STalign.extent_from_x((YI,XI))
 
 
-fig,ax = plt.subplots()
-ax.scatter(xM,yM,s=1,alpha=0.2)
-ax.scatter(xN,yN,s=1,alpha=0.1)
-ax.set_title("Plot1")
-ax.set_aspect('equal')
+# fig,ax = plt.subplots()
+# ax.scatter(xM,yM,s=1,alpha=0.2)
+# ax.scatter(xN,yN,s=1,alpha=0.1)
+# ax.set_title("Plot1")
+# ax.set_aspect('equal')
 
 
-XJ,YJ,M,_ = STalign.rasterize(xM, yM, dx=30)
+XJ,YJ,M = STalign.rasterize(xM, yM, dx=30, draw=0)
 J = np.vstack((M, M, M)) # make into 3xNxM
 # normalize
 J = STalign.normalize(J)
@@ -72,11 +80,11 @@ print(affine.shape)
 xMaffine = affine[0,:] 
 yMaffine = affine[1,:] 
 
-fig,ax = plt.subplots()
-ax.scatter(xMaffine,yMaffine,s=1,alpha=0.2)
-ax.scatter(xN,yN,s=1,alpha=0.1)
-ax.set_title("Plot2")
-ax.set_aspect('equal')
+# fig,ax = plt.subplots()
+# ax.scatter(xMaffine,yMaffine,s=1,alpha=0.2)
+# ax.scatter(xN,yN,s=1,alpha=0.1)
+# ax.set_title("Plot2")
+# ax.set_aspect('equal')
 # set device for building tensors
 if torch.cuda.is_available():
     torch.set_default_device('cuda:0')
@@ -108,20 +116,35 @@ out = STalign.LDDMM([YI,XI],I,[YJ,XJ],J,**params)
 A = out['A']
 v = out['v']
 xv = out['xv']
-phi = STalign.build_transform(xv,v,A,XJ=[YI,XI],direction='f')
-tpointsIphiiJ = STalign.transform_image_target_to_source(xv,v,A,[YJ,XJ],J,[YI,XI])
-phiipointsJ = STalign.transform_points_target_to_source(xv,v,A,pointsJ)
-tpointsJ = STalign.transform_points_target_to_source(xv,v,A,np.stack([yN, xN], -1))
-tpointsI = STalign.transform_points_source_to_target(xv,v,A,np.stack([yM, xM], -1))
-if tpointsI.is_cuda:
-    tpointsI = tpointsI.cpu()
+# phi = STalign.build_transform(xv,v,A,XJ=[YI,XI],direction='f')
+# tpointsIphiiJ = STalign.transform_image_target_to_source(xv,v,A,[YJ,XJ],J,[YI,XI])
+# phiipointsJ = STalign.transform_points_target_to_source(xv,v,A,pointsJ)
+# tpointsJ = STalign.transform_points_target_to_source(xv,v,A,np.stack([yN, xN], -1))
+# tpointsI = STalign.transform_points_source_to_target(xv,v,A,np.stack([yM, xM], -1))
+# if tpointsI.is_cuda:
+#     tpointsI = tpointsI.cpu()
 
-fig,ax = plt.subplots()
-ax.scatter(tpointsI[:, 0],tpointsI[:, 1],s=2,alpha=0.7)
-ax.scatter(yN,xN,marker='^', s=2,alpha=0.3)
-ax.set_title("Transformed H&E and MxIF cell centroids")
-ax.set_aspect('equal')
-plt.show()
+# fig,ax = plt.subplots()
+# ax.scatter(tpointsI[:, 0],tpointsI[:, 1],s=2,alpha=0.7)
+# ax.scatter(yN,xN,marker='^', s=2,alpha=0.3)
+# ax.set_title("Transformed H&E and MxIF cell centroids")
+# ax.set_aspect('equal')
+# plt.show()
+A.numpy()
 
+def get_rotation_translation(matrix):
+    # Calculate rotation angle in degrees
+    rotation_angle = math.degrees(math.atan2(matrix[1, 0], matrix[0, 0]))
+    # Calculate translation distance
+    translation_distance = math.sqrt(matrix[0, 2]**2 + matrix[1, 2]**2)
+
+    return rotation_angle, translation_distance
+
+
+test_rotation_angle, test_translation_distance = get_rotation_translation(A.numpy())
+
+
+print(f"Rotation Angle: {test_rotation_angle} degrees")
+print(f"Translation Distance: {test_translation_distance} pixels")
 print("Done")
 

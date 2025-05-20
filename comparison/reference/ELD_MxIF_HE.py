@@ -100,6 +100,9 @@ if __name__ == "__main__":
     HE_img_fn = "/data/jjiang10/Data/OV_TMA/HE_H-13.tif"
     MxIF_img_fn = "/data/jjiang10/Data/OV_TMA/MxIF_H-13.ome.tif"
 
+    output_dir = "/data/jjiang10/Data/ELD_test/"
+    model_dir = "/data/jjiang10/Projects/GitHub/MultimodalityHistoComb/"
+
     selected_channels = ["DAPI_AF_R01", "NAK", "PANCK"]
 
     he_img = tf.TiffFile(HE_img_fn).pages[0].asarray()  # read the images
@@ -115,34 +118,35 @@ if __name__ == "__main__":
     imageList.append(mxif_img_norm)
     # imageList.append(he_img)
 
-    print(len(imageList))
     imageList = downscale_images(imageList)
     imageList = mask_background(imageList)
     imageList = crop_non_tissue(imageList)
-    small_imgs = downsize_and_save(imageList, "/data/jjiang10/Data/ELD_test/")
+    small_imgs = downsize_and_save(imageList, output_dir)
 
     '''
     Train the model
     ``` bash
     python -m visdom.server -port 9006
 
-    eld-train --elastic_sigma 5 --cuda 1 --port 9006 --data_path /data/ekvall/tutorial/ --npts 14 --o scratch --step_size 5 --ws 0 --gamma 0.9 --angle 8 --model unimodal
+    eld-train --elastic_sigma 5 --cuda 1 --port 9006 --data_path /data/jjiang10/Data/ELD_test/ --npts 10 --o scratch --step_size 5 --ws 0 --gamma 0.9 --angle 8 --model multimodal
     ``` 
     '''
-
+    # TODO: 
+    # Issue: Can NOT load the pretrained model?
 
     image = torch.stack([preprocess(img) for img in small_imgs])
-
-    fan = loadFan(npoints=14,n_channels=3,path_to_model="../Exp_2/model_158.fan.pth")
+    # model_fn = os.path.join(model_dir, "comparison/ELD_pretrained_model/multimodal/sma/model_10.fan.pth")
+    model_fn = os.path.join(model_dir, "comparison/ELD_pretrained_model/multimodal/dev_heart/model_40.fan.pth")
+    fan = loadFan(npoints=20,n_channels=3,path_to_model=model_fn)
     #predict landmarks
     pts = predict_landmarks(fan, image)
 
     #combine landmarks and image
     np_img = toImg(image.cuda()[:,:3], pts, 128)
 
+    print("Plot landmarks with images")
     fig, axs = plt.subplots(3, 4, figsize=(15, 10))  # adjust the size as needed
     axs = axs.ravel()
-
     for i in range(len(np_img)):
         img = np_img[i]
         axs[i].imshow(img)
@@ -150,8 +154,11 @@ if __name__ == "__main__":
         axs[i].axis('off')  # to hide the axis
 
     plt.tight_layout()
-    plt.show()
+    sv_fig_fn = os.path.join(output_dir, "landmarks_with_img.png")
+    plt.savefig(sv_fig_fn)
+    plt.close()
 
+    print("Plot adjusted landmarks with images")
     scaled_pts = rescale_landmarks(pts, imageList)
     padded_images_torch, adjusted_landmarks = pad_image_and_adjust_landmarks(imageList, scaled_pts)
 
@@ -159,15 +166,15 @@ if __name__ == "__main__":
 
     fig, axs = plt.subplots(3, 4, figsize=(15, 10))  # adjust the size as needed
     axs = axs.ravel()
-
     for i in range(len(np_img)):
         img = np_img[i]
         axs[i].imshow(img)
         axs[i].set_title(f"Image {i+1}")
         axs[i].axis('off')  # to hide the axis
-
     plt.tight_layout()
-    plt.show()
+    sv_fig_fn = os.path.join(output_dir, "adjusted_landmarks_with_img.png")
+    plt.savefig(sv_fig_fn)
+    plt.close()
 
     image = padded_images_torch
     dst_image = create_target_images(image, 0)
@@ -175,7 +182,7 @@ if __name__ == "__main__":
     pts = adjusted_landmarks
     dst_pts = create_target_landmarks(pts, 0)
 
-
+    print("Apply rigid transformations")
     # Rigid transformation
     rigid_transform = Rigid()
     #warp images
