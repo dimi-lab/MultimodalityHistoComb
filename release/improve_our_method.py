@@ -60,8 +60,8 @@ for c in case_list:
 
   title = "Cell Centroids Before and after alignment"
   legend = ["HE cells", "MxIF cells", "trans_HE"]
-  fn = "log_centroids_alignment.png"
-  # plot_centroids_trans(HE_centroids_um, MxIF_centroids_um, trans_HE_centroids_um, legend, title, output_dir, fn)
+  fn = f"log_{c}_centroids_alignment.png"
+  plot_centroids_trans(HE_centroids_um, MxIF_centroids_um, trans_HE_centroids_um, legend, title, output_dir, fn)
 
   sample_loc = (max(HE_centroids_um[:, 0]/2), max(HE_centroids_um[:, 1]/2)) # sample the graph from the center of the core
   sample_wind = 150 # sample window size 100 um
